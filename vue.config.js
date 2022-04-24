@@ -8,9 +8,13 @@ module.exports = {
       plugins: [
         ScriptSetup({ /* options */ }),
         AutoImport({
-          imports: ['@vue/composition-api']
+          imports: ['@vue/composition-api'],
+          eslintrc: {
+            enabled: true, // Default `false`
+            filepath: './.eslintrc-auto-import.json',
+            globalsPropValue: true // Default `true`
+          },
         })
-
       ]
     }
   }

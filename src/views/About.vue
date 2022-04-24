@@ -8,8 +8,7 @@
 <script setup>
 import HelloWorld from '@/components/HelloWorld.vue'
 // import { ref } from '@vue/composition-api'
+
 const message = ref('good')
-const x = () => {
-  const a = 6
-}
+
 </script>

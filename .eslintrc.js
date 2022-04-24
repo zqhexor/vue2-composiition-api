@@ -3,16 +3,16 @@ module.exports = {
   env: {
     node: true
   },
-  // globals: {
-  //   defineProps: 'readonly',
-  //   defineEmits: 'readonly',
-  //   defineExpose: 'readonly'
-  // },
+  globals: {
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly'
+  },
   'extends': [
     'plugin:vue/essential',
     'eslint:recommended',
+    './.eslintrc-auto-import.json',
     // 'vue-global-api'
-    './.eslintrc-auto-import.json'
   ],
   parserOptions: {
     parser: 'babel-eslint'

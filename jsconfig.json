@@ -1,8 +1,5 @@
 {
   "vueCompilerOptions": {
     "experimentalCompatMode": 2
-  },
-  "compilerOptions": {
-    "noUnusedLocals": true
   }
 }
