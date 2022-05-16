@@ -7,18 +7,40 @@
 </template>
 
 <script setup>
-import { useUserStore } from "@/store/user";
+import  {useUserStore}  from "@/store/user";
 import { storeToRefs } from "pinia";
-// import { ref, onMounted } from '@vue/composition-api'
+// import { ref } from '@vue/composition-api'
 
 const userStore = useUserStore();
 console.log(userStore);
 
-const { age } = storeToRefs(userStore);
+const { age } = userStore
 
 const changeAge = () => {
-  userStore.changeAge()
-}
+  userStore.changeAge();
+};
 
-onMounted(() => {});
 </script>
+
+<!--<script>-->
+  <!--import { useUserStore } from "@/store/user";-->
+  <!--import { useAlarmStore } from "@/store/alarm";-->
+  <!--import { mapState, mapActions } from "@/store/storeManager";-->
+  <!--import { storeToRefs } from "pinia";-->
+  <!--const user =  useUserStore()-->
+  <!--const alarm = useAlarmStore()-->
+
+  <!--export default {-->
+    <!--data() {-->
+      <!--return {-->
+
+      <!--}-->
+    <!--},-->
+    <!--computed: {-->
+      <!--...mapState(user,["age"])-->
+    <!--},-->
+    <!--methods: {-->
+      <!--...mapActions(user,['changeAge'])-->
+    <!--}-->
+  <!--}-->
+<!--</script>-->
