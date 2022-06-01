@@ -26,7 +26,7 @@
         {{ item.label }}
       </Checker>
 
-
+        <button @click="test">test</button>
     </div>
   </div>
 
@@ -67,6 +67,13 @@
   } = useChecker(CHECKER_TYPE.CHECKBOX)
   optionsRef.value = serviceTypeOptions
 
+  const c = computed(() => a1.value)
+  const a1 = ref(0)
+  const b1 = ref(c)
+  function test() {
+    a1.value = 2
+    console.log(b1.value)
+  }
 </script>
 
 <style scoped>
