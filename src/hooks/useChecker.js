@@ -20,7 +20,7 @@ export function useChecker({ type = CHECKER_TYPE.CHECKBOX, min = 0, max = undefi
   const {value = 'value', disabled = 'disabled'} = config;
   // 选中项
   const checkedRef = ref(null);
-  // 选项包含字段[value: any,label: string, disabled: boolean]
+  // 选项 ref(Array<{value: any, disabled?: boolean}>)
   const optionsRef = ref([]);
 
   if (type === CHECKER_TYPE.CHECKBOX) {
@@ -33,14 +33,14 @@ export function useChecker({ type = CHECKER_TYPE.CHECKBOX, min = 0, max = undefi
   const enabledOptionsRef = computed(() => optionsRef.value.filter((option) => option[disabled] !== true));
 
   // 最大选项默认值
-  const maxDefaultRef = computed(()=>{
+  const maxDefaultRef = computed(() => {
     return max || enabledOptionsRef.value.length;
   });
 
   /**
    * 判断选项是否选中
-   * @param value
-   * @returns {boolean}
+   * @param value 选项value值
+   * @returns {boolean} true:选中
    */
   const isActive = (value) => {
     return type === CHECKER_TYPE.RADIO ? checkedRef.value === value : checkedRef.value.includes(value);
@@ -60,7 +60,7 @@ export function useChecker({ type = CHECKER_TYPE.CHECKBOX, min = 0, max = undefi
 
   /**
    * 点击选项选择操作
-   * @param option 选项属性，包含[value: any,label: string, disabled: boolean]
+   * @param option 选项{value: any, disabled?: boolean}
    */
   function check(option) {
     if (option[disabled] === false) {
@@ -98,11 +98,17 @@ export function useChecker({ type = CHECKER_TYPE.CHECKBOX, min = 0, max = undefi
   }
 
   return {
-    checkedRef, // 选中数（Array|String）
-    optionsRef, // 选项（Array）[value: any,label: string, disabled: boolean]
-    isActive, // 当前选项是否选中函数(Function)
-    check, // 点击选项函数(Function)
-    allActiveRef, // 全选是否选中(Boolean)
-    checkAll // 点击全选事件(Function)
+    // 选中项 ref(Array<string|number> | string | number)
+    checkedRef,
+    // 选项 ref(Array<{value: any, disabled?: boolean}>)
+    optionsRef,
+    // 判断选项是否为选中项 (value: any) => boolean
+    isActive,
+    // 点击选项函数 (option:{value: any, disabled?: boolean}) => void
+    check,
+    // 全选是否选中 ref<Boolean>
+    allActiveRef,
+    // 点击全选函数 () => void
+    checkAll
   };
 }
