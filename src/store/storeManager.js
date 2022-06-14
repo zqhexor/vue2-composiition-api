@@ -1,4 +1,4 @@
-import {isEmpty} from 'lodash';
+import { isEmpty } from 'lodash';
 
 /**
  * 全局store
@@ -8,12 +8,12 @@ const stores = []
 
 /**
  *
- * @param id 模块明
+ * @param id 模块唯一标识
  * @param store 定义的内容
  * @returns {function(): *}
  */
 export function defineStore(id, store) {
-  stores.push({id})
+  stores.push({ id })
   return () => {
     const index = stores.findIndex((store) => store.id === id)
     if (!stores[index].storeInstance) {
