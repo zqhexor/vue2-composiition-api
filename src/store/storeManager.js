@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 
 /**
  * 全局store
@@ -15,8 +15,8 @@ const stores = []
 export function defineStore(id, store) {
   stores.push({id})
   return () => {
-    const index = stores.findIndex((store) => store.id === id )
-    if(!stores[index].storeInstance) {
+    const index = stores.findIndex((store) => store.id === id)
+    if (!stores[index].storeInstance) {
       stores[index].storeInstance = store()
     }
     console.log(stores)
@@ -37,9 +37,7 @@ export function mapState(store, states) {
     const result = {}
     for (let [k, v] of Object.entries(store)) {
       if (isRef(v)) {
-        result[k] = () => {
-          return v.value
-        }
+        result[k] = () => v.value
       }
     }
     return result
@@ -47,19 +45,16 @@ export function mapState(store, states) {
     const result = {}
     for (let [k, v] of Object.entries(store)) {
       if (isRef(v) && states.includes(k)) {
-        result[k] = () => {
-          return v.value
-        }
+        result[k] = () => v.value
       }
     }
     return result
   } else if (Object.prototype.toString.call(states) === '[object Object]') {
     const result = {}
+    const stateKeys = Object.keys(states)
     for (let [k, v] of Object.entries(store)) {
-      if (isRef(v) && Object.keys(states).includes(k)) {
-        result[states[k]] = () => {
-          return v.value
-        }
+      if (isRef(v) && stateKeys.includes(k)) {
+        result[states[k]] = () => v.value
       }
     }
     return result
@@ -78,14 +73,12 @@ export function mapActions(store, actions) {
   if (isEmpty(actions)) {
     const result = {}
     for (let [k, v] of Object.entries(store)) {
-      if (isRef(v)) {
-        result[k] = () => {
-          return v.value
-        }
+      if (!isRef(v)) {
+        result[k] = v
       }
     }
     return result
-  }else if (Array.isArray(actions)) {
+  } else if (Array.isArray(actions)) {
     const result = {}
     for (let [k, v] of Object.entries(store)) {
       if (!isRef(v) && actions.includes(k)) {
@@ -93,10 +86,11 @@ export function mapActions(store, actions) {
       }
     }
     return result
-  }else if (Object.prototype.toString.call(actions) === '[object Object]') {
+  } else if (Object.prototype.toString.call(actions) === '[object Object]') {
     const result = {}
+    const actionKeys = Object.keys(actions)
     for (let [k, v] of Object.entries(store)) {
-      if (!isRef(v) && Object.keys(actions).includes(k)) {
+      if (!isRef(v) && actionKeys.includes(k)) {
         result[actions[k]] = v
       }
     }
@@ -118,10 +112,10 @@ export function mapWritableState(store, states) {
     for (let [k, v] of Object.entries(store)) {
       if (isRef(v)) {
         result[k] = {
-          set(value){
+          set(value) {
             v.value = value
           },
-          get(){
+          get() {
             return v.value
           }
         }
@@ -133,10 +127,10 @@ export function mapWritableState(store, states) {
     for (let [k, v] of Object.entries(store)) {
       if (isRef(v) && states.includes(k)) {
         result[k] = {
-          set(value){
+          set(value) {
             v.value = value
           },
-          get(){
+          get() {
             return v.value
           }
         }
@@ -145,13 +139,14 @@ export function mapWritableState(store, states) {
     return result
   } else if (Object.prototype.toString.call(states) === '[object Object]') {
     const result = {}
+    const stateKeys = Object.keys(states)
     for (let [k, v] of Object.entries(store)) {
-      if (isRef(v) && Object.keys(states).includes(k)) {
-        result[states[k]] ={
-          set(value){
+      if (isRef(v) && stateKeys.includes(k)) {
+        result[states[k]] = {
+          set(value) {
             v.value = value
           },
-          get(){
+          get() {
             return v.value
           }
         }
