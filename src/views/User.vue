@@ -3,44 +3,22 @@
     <h3>setup pinia测试</h3>
     <div>{{ age }}</div>
     <button @click="changeAge">changeAge</button>
+    <button @click="changeAge1">直接改变age</button>
   </div>
 </template>
 
 <script setup>
-import  {useUserStore}  from "@/store/user";
-import { storeToRefs } from "pinia";
-// import { ref } from '@vue/composition-api'
-
+import  { useUserStore }  from "@/store/user";
 const userStore = useUserStore();
 console.log(userStore);
-
 const { age } = userStore
 
 const changeAge = () => {
   userStore.changeAge();
 };
 
+const changeAge1 = () => {
+  age.value += 1
+};
+
 </script>
-
-<!--<script>-->
-  <!--import { useUserStore } from "@/store/user";-->
-  <!--import { useAlarmStore } from "@/store/alarm";-->
-  <!--import { mapState, mapActions } from "@/store/storeManager";-->
-  <!--import { storeToRefs } from "pinia";-->
-  <!--const user =  useUserStore()-->
-  <!--const alarm = useAlarmStore()-->
-
-  <!--export default {-->
-    <!--data() {-->
-      <!--return {-->
-
-      <!--}-->
-    <!--},-->
-    <!--computed: {-->
-      <!--...mapState(user,["age"])-->
-    <!--},-->
-    <!--methods: {-->
-      <!--...mapActions(user,['changeAge'])-->
-    <!--}-->
-  <!--}-->
-<!--</script>-->

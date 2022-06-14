@@ -25,7 +25,7 @@ export function defineStore(id, store) {
 }
 
 /**
- * 用于Options API 取值setter和getter的值
+ * 用于Options API 取state和getter的值
  * @param store 引用的store
  * @param states 要取的state或者getter， 支持array或者object
  *     不传： 全部取出来
@@ -98,6 +98,63 @@ export function mapActions(store, actions) {
     for (let [k, v] of Object.entries(store)) {
       if (!isRef(v) && Object.keys(actions).includes(k)) {
         result[actions[k]] = v
+      }
+    }
+    return result
+  }
+}
+
+/**
+ * 用于Options API 读写state属性
+ * @param store 引用的store
+ * @param states 要取的state或者getter， 支持array或者object
+ *     不传： 全部取出来
+ *     array：指定key值，
+ *     object: {'old':'new'} 支持改名
+ */
+export function mapWritableState(store, states) {
+  if (isEmpty(states)) {
+    const result = {}
+    for (let [k, v] of Object.entries(store)) {
+      if (isRef(v)) {
+        result[k] = {
+          set(value){
+            v.value = value
+          },
+          get(){
+            return v.value
+          }
+        }
+      }
+    }
+    return result
+  } else if (Array.isArray(states)) {
+    const result = {}
+    for (let [k, v] of Object.entries(store)) {
+      if (isRef(v) && states.includes(k)) {
+        result[k] = {
+          set(value){
+            v.value = value
+          },
+          get(){
+            return v.value
+          }
+        }
+      }
+    }
+    return result
+  } else if (Object.prototype.toString.call(states) === '[object Object]') {
+    const result = {}
+    for (let [k, v] of Object.entries(store)) {
+      if (isRef(v) && Object.keys(states).includes(k)) {
+        result[states[k]] ={
+          set(value){
+            v.value = value
+          },
+          get(){
+            return v.value
+          }
+        }
       }
     }
     return result

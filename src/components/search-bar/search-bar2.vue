@@ -26,6 +26,7 @@ const emit = defineEmits(["on-search"]);
 const vm = getCurrentInstance();
 console.log(vm);
 console.log(vm.setupContext.listeners);
+console.log(vm.proxy.$listeners);
 console.log(useAttrs());
 console.log(useSlots());
 const inputValue = computed({
