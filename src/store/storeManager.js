@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import {isEmpty} from 'lodash';
 
 /**
  * 全局store
@@ -7,13 +7,13 @@ import { isEmpty } from 'lodash';
 const stores = []
 
 /**
- *
+ * 定义store
  * @param id 模块唯一标识
- * @param store 定义的内容
+ * @param store  state用ref定义, getter用computed定义, action用function定义
  * @returns {function(): *}
  */
 export function defineStore(id, store) {
-  stores.push({ id })
+  stores.push({id})
   return () => {
     const index = stores.findIndex((store) => store.id === id)
     if (!stores[index].storeInstance) {
@@ -33,32 +33,34 @@ export function defineStore(id, store) {
  *     object: {'old':'new'} 支持改名
  */
 export function mapState(store, states) {
+  const result = {}
   if (isEmpty(states)) {
-    const result = {}
     for (let [k, v] of Object.entries(store)) {
       if (isRef(v)) {
         result[k] = () => v.value
       }
     }
     return result
-  } else if (Array.isArray(states)) {
-    const result = {}
-    for (let [k, v] of Object.entries(store)) {
-      if (isRef(v) && states.includes(k)) {
-        result[k] = () => v.value
+  }
+  if (Array.isArray(states)) {
+    states.forEach((i) => {
+      const val = store[i]
+      if (val && isRef(val)) {
+        result[i] = () => val.value
       }
-    }
+    })
     return result
-  } else if (Object.prototype.toString.call(states) === '[object Object]') {
-    const result = {}
-    const stateKeys = Object.keys(states)
-    for (let [k, v] of Object.entries(store)) {
-      if (isRef(v) && stateKeys.includes(k)) {
-        result[states[k]] = () => v.value
+  }
+  if (Object.prototype.toString.call(states) === '[object Object]') {
+    for (let [k, v] of Object.entries(states)) {
+      const val = store[k]
+      if (val && isRef(val)) {
+        result[v] = () => val.value
       }
     }
     return result
   }
+  return result
 }
 
 /**
@@ -70,32 +72,34 @@ export function mapState(store, states) {
  *     object: {'old':'new'} 支持改名
  */
 export function mapActions(store, actions) {
+  const result = {}
   if (isEmpty(actions)) {
-    const result = {}
     for (let [k, v] of Object.entries(store)) {
-      if (!isRef(v)) {
+      if (!isRef(v) && typeof v === 'function') {
         result[k] = v
-      }
-    }
-    return result
-  } else if (Array.isArray(actions)) {
-    const result = {}
-    for (let [k, v] of Object.entries(store)) {
-      if (!isRef(v) && actions.includes(k)) {
-        result[k] = v
-      }
-    }
-    return result
-  } else if (Object.prototype.toString.call(actions) === '[object Object]') {
-    const result = {}
-    const actionKeys = Object.keys(actions)
-    for (let [k, v] of Object.entries(store)) {
-      if (!isRef(v) && actionKeys.includes(k)) {
-        result[actions[k]] = v
       }
     }
     return result
   }
+  if (Array.isArray(actions)) {
+    actions.forEach((i) => {
+      const val = store[i]
+      if (val && !isRef(val) && typeof val === 'function') {
+        result[i] = val
+      }
+    })
+    return result
+  }
+  if (Object.prototype.toString.call(actions) === '[object Object]') {
+    for (let [k, v] of Object.entries(actions)) {
+      const val = store[k]
+      if (val && !isRef(val) && typeof val === 'function') {
+        result[v] = val
+      }
+    }
+    return result
+  }
+  return result
 }
 
 /**
@@ -107,8 +111,8 @@ export function mapActions(store, actions) {
  *     object: {'old':'new'} 支持改名
  */
 export function mapWritableState(store, states) {
+  const result = {}
   if (isEmpty(states)) {
-    const result = {}
     for (let [k, v] of Object.entries(store)) {
       if (isRef(v)) {
         result[k] = {
@@ -122,36 +126,38 @@ export function mapWritableState(store, states) {
       }
     }
     return result
-  } else if (Array.isArray(states)) {
-    const result = {}
-    for (let [k, v] of Object.entries(store)) {
-      if (isRef(v) && states.includes(k)) {
-        result[k] = {
+  }
+  if (Array.isArray(states)) {
+    states.forEach((i) => {
+      const val = store[i]
+      if (val && isRef(val)) {
+        result[i] = {
           set(value) {
-            v.value = value
+            val.value = value
           },
           get() {
-            return v.value
+            return val.value
           }
         }
       }
-    }
+    })
     return result
-  } else if (Object.prototype.toString.call(states) === '[object Object]') {
-    const result = {}
-    const stateKeys = Object.keys(states)
-    for (let [k, v] of Object.entries(store)) {
-      if (isRef(v) && stateKeys.includes(k)) {
-        result[states[k]] = {
+  }
+  if (Object.prototype.toString.call(states) === '[object Object]') {
+    for (let [k, v] of Object.entries(states)) {
+      const val = store[k]
+      if (val && isRef(val)) {
+        result[v] = {
           set(value) {
-            v.value = value
+            val.value = value
           },
           get() {
-            return v.value
+            return val.value
           }
         }
       }
     }
     return result
   }
+  return result
 }
