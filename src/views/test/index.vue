@@ -64,7 +64,7 @@
     check,
     allActiveRef,
     checkAll
-  } = useChecker(CHECKER_TYPE.CHECKBOX)
+  } = useChecker({ type: CHECKER_TYPE.CHECKBOX })
   optionsRef.value = serviceTypeOptions
 
   const c = computed(() => a1.value)
